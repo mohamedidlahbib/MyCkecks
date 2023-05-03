@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/home',[HomeController::class,'redirect']);
 Route::get('/',[HomeController::class,'index']);
+Route::post('/upload_check',[HomeController::class,'upload_check']);
+
+
 
 
 

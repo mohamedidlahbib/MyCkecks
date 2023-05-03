@@ -23,8 +23,32 @@
   <style>
     .order-pos {
         position: absolute;
-        top: 710px;
-        left: 260px;
+        top: 780px;
+        left: 290px;
+        font-size: 20px
+        }
+
+        .montant-pos {
+        position: absolute;
+        top: 780px;
+        left: 900px;
+        font-size: 20px
+        }
+        .payerpour-pos {
+        position: absolute;
+        top: 750px;
+        left: 350px;
+        font-size: 20px
+        }
+        .chequebarre-pos {
+        position: absolute;
+        top: 650px;
+        font-size: 20px
+        }
+        .datecheque-pos {
+        position: absolute;
+        top: 630px;
+        left: 900px;
         font-size: 20px
         }
   </style>
@@ -106,30 +130,31 @@
   </header>
 
   <div class="container"  style=" ">
-      <form action="" method="POST" enctype="">
+      <form action="{{ url('upload_check') }}" method="POST" >
               @csrf
               <div style="padding: 15px">
                 <label >Pays:</label>
                 <select name="pay" style="color: black; width: 200px ;">
-                    <option value="skin">Morocco</option>
-                    <option value="heart">Canada</option>
-                    <option value="eyes">france</option>
+                    <option value="Morocco">Morocco</option>
+                    <option value="Canada">Canada</option>
+                    <option value="France">france</option>
                     
                 </select>
                 <div class="pay-pos"></div>
             </div>
             <div style="padding: 15px">
               <label >Banks:</label>
-              <select name="bank" style="color: black; width: 200px ;">
-                  <option value="skin">Al Barid</option>
-                  <option value="heart">BMCI</option>
-                  <option value="eyes">CIH</option>
+              <select id="bank" name="bank" style="color: black; width: 200px;">
+                <option value="Al Barid">Al Barid</option>
+                <option value="BMCI">BMCI</option>
+                <option value="CIH">CIH</option>
               </select>
               <div class="bank-pos"></div>
           </div>
               <div style="padding: 15px">
                   <label >Date de Cheque:</label>
-                  <input type="date" name="datecheque" >
+                  <input type="date" id="datecheque" name="datecheque" >
+                  <div class="datecheque-pos"></div>
                   
               </div>
               <div style="padding: 15px">
@@ -137,24 +162,59 @@
                   <input type="text" id="order" name="order" style="color: black" >
                   <div class="order-pos"></div>
               </div>
+              
               <div style="padding: 15px">
                 <label > Montant:</label>
-                <input type="number" name="montant" style="color: black" >
+                <input type="number" id="montant" name="montant" style="color: black" >
+                <div class="montant-pos"></div>
             </div>
             <div style="padding: 15px">
               <label > Payer pour:</label>
-              <input type="text" name="payerpour" style="color: black" >
+              <input type="text" id="payerpour" name="payerpour" style="color: black" >
+              <div class="payerpour-pos"></div>
           </div>
           <div style="padding: 15px">
             <label > Cheque bares:</label>
-            <input type="text" name="payerpour" style="color: black" >
+            <input type="text" id="chequebarre" name="chequebarre" style="color: black" >
+            <div class="chequebarre-pos"></div>
         </div>
-              
-        
+          
+        <button type="submit" class="btn btn-success mx-4  mt-3 mb-3 ">Submit</button>
         
       </form>
 
-      <img src="assets/img/checks/cheque.png" alt="hhhhh">
+      
+      <img id="bank-image" src="assets/img/checks/cheque.png" alt="Check image">>
+    
+      
+   
+
+
+      <h2 style="text-align: center;">Tableau des derniers chèques imprimés</h2>
+      <table class="table" style="margin-top: 20px;">
+        <thead>
+          <tr>
+            <th scope="col">Chq. Date</th>
+            <th scope="col">À l'ordre de</th>
+            <th scope="col">Chq. montant</th>
+            <th scope="col">monnaie</th>
+            <th scope="col">Payè pour</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($check as $check)
+            <tr>
+                <td>{{ $check->datecheque }}</td>
+                <td>{{ $check->order }}</td>
+                <td>{{ $check->montant }}</td>
+                <td>DH</td>
+                <td>{{ $check->payerpour }}</td>
+            </tr>
+          @endforeach
+
+            
+        </tbody>
+      </table>
   </div>
 
   <script>
@@ -164,6 +224,48 @@
         input.addEventListener('input', () => {
         output.textContent = input.value;
         });
+
+        const input1 = document.getElementById('montant');
+        const output1 = document.querySelector('.montant-pos');
+
+        input1.addEventListener('input', () => {
+        output1.textContent = input1.value;
+        });
+
+        const input2 = document.getElementById('payerpour');
+        const output2 = document.querySelector('.payerpour-pos');
+
+        input2.addEventListener('input', () => {
+        output2.textContent = input2.value;
+        });
+
+        const input3 = document.getElementById('chequebarre');
+        const output3 = document.querySelector('.chequebarre-pos');
+
+        input3.addEventListener('input', () => {
+        output3.textContent = input3.value;
+        });
+
+        const input4 = document.getElementById('datecheque');
+        const output4 = document.querySelector('.datecheque-pos');
+
+        input4.addEventListener('input', () => {
+        output4.textContent = input4.value;
+        });
+
+        const bankSelect = document.getElementById('bank');
+        const bankImage = document.getElementById('bank-image');
+
+        bankSelect.addEventListener('change', (event) => {
+          const selectedValue = event.target.value;
+
+          if (selectedValue === 'CIH') {
+            bankImage.src = 'assets/img/checks/cheque.png';
+          } else if (selectedValue === 'Al Barid') {
+            bankImage.src = 'assets/img/checks/chaabi.jpeg';
+          }
+  });
+
   </script>
 
 
